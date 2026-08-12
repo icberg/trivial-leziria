@@ -417,6 +417,10 @@
 
 </main>
 
+<footer style="text-align:center; padding:18px 12px 24px; color:var(--ink2); font-size:12.5px; font-style:italic; border-top:1px solid var(--line); margin-top:20px">
+  <span id="pageFooterText">Supported by the European Union, Erasmus+, and Associação Mentalidade X.</span>
+</footer>
+
 <!-- Firebase compat SDK — plain script tags, no build step needed -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -720,6 +724,8 @@ function renderSetupStaticText(){
   const detailPs = document.querySelectorAll("#setup details p");
   if(detailPs[0]) detailPs[0].textContent = t("rulesP1");
   if(detailPs[1]) detailPs[1].innerHTML = t("rulesP2");
+  const footerText = document.getElementById("pageFooterText");
+  if(footerText) footerText.textContent = t("aboutAcknowledgement");
 }
 
 /* ---------- Firebase setup ---------- */
@@ -1213,7 +1219,6 @@ function aboutModalHTML(){
         <h3>${t("credits")}</h3>
         <p style="font-size:13.5px;color:var(--ink2)">${t("aboutCreditsP")}</p>
         <p class="sub2" style="margin-top:6px">${t("aboutCreditsNames")}</p>
-        <p class="sub2" style="margin-top:10px;font-style:italic">${t("aboutAcknowledgement")}</p>
       </section>
     </div>
   </div>`;

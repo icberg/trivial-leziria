@@ -519,7 +519,7 @@ const UI = {
     aboutPartners: "Partners",
     aboutTeaches: "What this game teaches",
     aboutTeachesP: "Trivial Lezíria Europeia 2.0 simulates how the European Parliament actually works: real MEPs, real parties, real laws from the current mandate, and their direct effect on the Lezíria do Tejo. The Trilogue squares specifically simulate coalition-building — no single group holds a majority in the real Parliament, so passing anything requires two or more groups agreeing to work together, exactly as delegations must negotiate a split and a joint answer here.",
-    aboutCreditsP: "Developed as part of Lezíria Europeia 2.0, a European Solidarity Corps project by Associação Mentalidade X de Santarém, in partnership with a high school in Golegã. Year: 2026.",
+    aboutCreditsP: "Developed as part of Lezíria Europeia 2.0, an Erasmus+ KA154 project organised by the Mentalidade X Association in partnership with Golegã Municipal Council and the Golegã, Azinhaga and Pombalinho School Group from July 2024 to June 2026.",
     aboutCreditsAdd: "— add developer / contributor names here —",
     aboutCreditsNames: "Fahim Murshed — project lead &amp; developer. Built with the assistance of Claude (Anthropic).",
 
@@ -634,7 +634,7 @@ const UI = {
     aboutPartners: "Parceiros",
     aboutTeaches: "O que este jogo ensina",
     aboutTeachesP: "O Trivial Lezíria Europeia 2.0 simula o funcionamento real do Parlamento Europeu: eurodeputados reais, partidos reais, leis reais da legislatura atual e o seu efeito direto na Lezíria do Tejo. As casas de Trílogo simulam especificamente a construção de alianças — nenhum grupo tem maioria absoluta no Parlamento real, por isso aprovar qualquer coisa exige que dois ou mais grupos concordem em trabalhar juntos, tal como as delegações têm de negociar aqui uma divisão e uma resposta conjunta.",
-    aboutCreditsP: "Desenvolvido no âmbito do Lezíria Europeia 2.0, um projeto do Corpo Europeu de Solidariedade da Associação Mentalidade X de Santarém, em parceria com uma escola secundária da Golegã. Ano: 2026.",
+    aboutCreditsP: "Desenvolvido no âmbito do Lezíria Europeia 2.0, um projeto Erasmus+ KA154 organizado pela Associação Mentalidade X, em parceria com a Câmara Municipal da Golegã e o Agrupamento de Escolas de Golegã, Azinhaga e Pombalinho, de julho de 2024 a junho de 2026.",
     aboutCreditsAdd: "— adicionem aqui os nomes dos programadores/colaboradores —",
     aboutCreditsNames: "Fahim Murshed — responsável e programador do projeto. Desenvolvido com a assistência do Claude (Anthropic).",
 
@@ -6718,7 +6718,9 @@ function goBackToCount(){
 function startGame(){
   teams = TEAMS_ALL.slice(0,teamCount).map(t=>{
     const custom = (teamLabels[t.name]||"").trim();
-    return {...t, party:t.name, name: custom || t.name, pos:0, lifeline:true, skip:false,
+    const finalName = custom || t.name;
+    const letters = finalName.replace(/[^\p{L}\p{N}]/gu, "").slice(0,3).toUpperCase() || t.letter;
+    return {...t, party:t.name, name: finalName, letter: letters, pos:0, lifeline:true, skip:false,
       stats:{correct:0, wrong:0, byCat:{parliament:0,meps:0,laws:0,leziria:0}, log:[]}};
   });
   cur = -1; winner = null; usedQ.clear(); usedE.clear();
@@ -6785,8 +6787,9 @@ function buildBoard(){
     const el = document.createElementNS("http://www.w3.org/2000/svg", "g");
     el.setAttribute("class", "pawn"); 
     el.setAttribute("id", "pawn" + i);
+    const fsize = tm.letter.length >= 3 ? 8 : tm.letter.length === 2 ? 9.5 : 11;
     el.innerHTML = `<circle r="12" fill="${tm.color}" stroke="#FFFFFF" stroke-width="2.5" shadow="0 2px 4px rgba(0,0,0,0.2)"/>
-                    <text y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">${tm.letter}</text>`;
+                    <text y="4" text-anchor="middle" font-size="${fsize}" font-weight="800" fill="#fff">${escapeHtml(tm.letter)}</text>`;
     g.appendChild(el);
   });
   updatePawns();

@@ -424,7 +424,9 @@
 <!-- Firebase compat SDK — plain script tags, no build step needed -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+
+<!-- Umami — privacy-first analytics, no cookies, no personal data -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="389a34f0-173d-420e-8b9a-d1669d9abd5f"></script>
 <script>
 "use strict";
 
@@ -742,7 +744,6 @@ const firebaseConfig = {
 };
 
 let auth = null;
-let analytics = null;
 let firebaseReady = false;
 
 function showAuthMsg(text, ok=false){
@@ -761,14 +762,15 @@ try{
   firebase.initializeApp(firebaseConfig);
   auth = firebase.auth();
   firebaseReady = true;
-  try{ analytics = firebase.analytics(); }catch(e){ console.error("Analytics unavailable:", e); }
 }catch(e){
   console.error("Firebase failed to initialize:", e);
 }
 
-/* Fire-and-forget analytics logging — never lets an analytics failure break the game. */
+/* Fire-and-forget analytics logging via Umami — never lets an analytics failure break the game.
+   Umami's script attaches a global `umami` object once loaded; the `defer` on its <script>
+   tag can mean it isn't ready the instant the game boots, so we guard every call. */
 function track(eventName, params){
-  try{ if(analytics) analytics.logEvent(eventName, params || {}); }catch(e){}
+  try{ if(window.umami) window.umami.track(eventName, params || {}); }catch(e){}
 }
 
 window.addEventListener("DOMContentLoaded", () => {

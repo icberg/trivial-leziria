@@ -151,7 +151,9 @@ if(auth){
       badge.innerHTML = "";
       resetBtn.classList.add("hidden");
       ["menuProfile","menuHistory","menuVote","menuProposal","menuSettings","menuAbout","menuPrivacy"].forEach(id=>document.getElementById(id).classList.add("hidden"));
-      closeModal();
+      /* modals.js loads after auth.js; Firebase can resolve auth state before it's
+         finished loading, so guard this the same way setLang() guards cross-file calls. */
+      if(typeof closeModal === "function") closeModal();
     }
   });
 }
